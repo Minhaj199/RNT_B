@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { vaidatorAddForm } from "../utils/zod/zodValidation";
+import { validatorAddForm, validateDeleteInput } from "../utils/zod/zodValidation";
 import { fileModel } from "../models/filesStructure";
 import { NodeData } from "../types";
 import { CreateChildNode } from "../service/fileSystemService";
@@ -7,7 +7,7 @@ import { CreateChildNode } from "../service/fileSystemService";
 export const controller = {
   createNode: async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const isValid = vaidatorAddForm(req.body);
+      const isValid = validatorAddForm(req.body);
       if (isValid) {
         let result = null;
         if (!isValid?.parentId) {
@@ -24,7 +24,6 @@ export const controller = {
         throw new Error("internal server error");
       }
     } catch (error) {
-      console.log(error);
       next(error);
     }
   },
@@ -36,4 +35,21 @@ export const controller = {
       next(error);
     }
   },
+  deleteNodes: async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const isVaiid=validateDeleteInput(req.body)
+      if(isVaiid){
+        const result=await fileModel.deleteMany({_id:{$in:isVaiid}})
+        if(result){
+          res.json({success:true})
+        }else{
+          throw new Error('error on deletion')
+        }
+      }else{
+        throw new Error('not valid input')
+      }
+    } catch (error) {
+      throw error
+    }
+  }
 };

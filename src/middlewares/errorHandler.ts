@@ -4,7 +4,7 @@ import e, {
   Request,
   Response,
 } from "express";
-import { HttpStatus } from "../constrains/statusCodeContrain";
+import { HttpStatus } from "../constants/statusCodeContrain";
 import { MongoDuplicateKeyError } from "../types";
 import { AppError } from "../utils/customError";
 

@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { HttpStatus } from "../constrains/statusCodeContrain";
+import { HttpStatus } from "../constants/statusCodeContrain";
 
 export const pageNotFound = (
   req: Request,

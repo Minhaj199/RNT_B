@@ -1,4 +1,5 @@
-import { HttpStatus } from "../../constrains/statusCodeContrain";
+import z, { date, success } from "zod";
+import { HttpStatus } from "../../constants/statusCodeContrain";
 import { AppError } from "../customError";
 import { envSchema, newNodeSchema } from "./zodSchemas";
 
@@ -19,7 +20,7 @@ export const env = {
 
 //////////////validate new node creation input data//
 
-export function vaidatorAddForm(data: unknown) {
+export function validatorAddForm(data: unknown) {
   const validatedData = newNodeSchema.safeParse(data);
   if (validatedData.success) {
     return validatedData.data;
@@ -28,5 +29,17 @@ export function vaidatorAddForm(data: unknown) {
       validatedData.error.issues[0].message,
       HttpStatus.BAD_REQUEST
     );
+  }
+}
+export function validateDeleteInput(data:unknown){
+  try {
+   const validatedData= z.array(z.string('id should be string').min(24,'not vaid id')).min(1,'id not found').safeParse(data)
+    if(validatedData.success){
+      return validatedData.data
+    }else{
+      throw new Error(validatedData.error.issues[0].message)
+    }
+  } catch (error) {
+    throw error
   }
 }

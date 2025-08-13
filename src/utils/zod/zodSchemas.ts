@@ -13,4 +13,5 @@ export const newNodeSchema=z.object({
     children:z.array(z.string('not valid child').min(3,'not valid child')).optional()
 })
 
+
 export type NewNodeSchemaType=z.infer<typeof newNodeSchema>
